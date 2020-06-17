@@ -1,0 +1,40 @@
+<launch>
+    
+    <arg name="path"      default="$(find stereo_odometry)/config/"/>
+    <arg name="config"    default="$(find stereo_odometry)/config/kitti00.yaml"/>
+    <arg name="rviz"      default="true"/>
+
+    <node pkg="stereo_odometry" name="viso2" type="stereo_odometry" args="${arg config} ${arg path}" output="screen">
+
+        <!--viso2 camera info-->
+        <param name="cam_fx"        value="718.856" />
+        <param name="cam_cx"        value="607.1928" />
+        <param name="cam_cy"        value="185.2157" />
+        <!--used for disparity: bf = baseline * f-->
+        <param name="cam_bf"        value="386.1448"/>
+        <param name="cam_width"     value="1241" />
+        <param name="cam_height"    value="376" />
+        <!--viso2 matcher parameters-->
+        <param name="nm_s"          value="3"/>
+        <param name="nms_tau"       value="50"/>
+        <param name="match_binsize"     value="50"/>
+        <param name="match_radius"      value="200"/>
+        <param name="disp_tolerance"    value="2"/>
+        <param name="multi_stage"       value="1"/>
+        <param name="refinement"        value="1"/>
+        <param name="half_resolution"   value="1"/>
+
+        <!--system parameters-->
+        <param name="publish_tf"    type="bool"     value="true"/>
+        <param name="frame_id"      type="string"   value="world"/>
+        <param name="child_frame"   type="string"   value="camera"/>
+        <remap from="/camera/left/image_raw"       to="/left_image"/>
+        <remap from="/camera/right/image_raw"      to="/right_image"/>
+        <!--rosparam file="$(find stereo_odometry)/config/kitti00-02.yaml"/-->
+    </node>
+
+    <group if="$(arg rviz)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find stereo_odometry)/config/viso2.rviz"/>
+    </group>
+
+</launch>
