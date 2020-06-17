@@ -4,4 +4,6 @@
 ### Dependecy
 - ROS
 - Eigen
-- OpenCv
+- OpenCV
+### Notice
+when you want to run this package with your camera, you need do stereorecity 
